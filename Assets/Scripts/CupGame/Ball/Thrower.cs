@@ -20,14 +20,10 @@ public class Thrower : MonoBehaviour
     private void Awake()
     {
         _spawner = GetComponent<Spawner>();
-    }
-
-    private void OnEnable()
-    {
         _spawner.ObjectSpawned += OnObjectSpawned;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _spawner.ObjectSpawned -= OnObjectSpawned;
     }

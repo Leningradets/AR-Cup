@@ -13,9 +13,11 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _timeBeforeSpawn;
     [SerializeField] private CylinderTargetBehaviour _cylinderTarget;
     [SerializeField] private ThrowsViewer _throwsViewer;
+    [SerializeField] private TargetTrackableEventHandler _trackableEventHandler;
 
     private Thrower _thrower;
     private List<ThrowableObject> _throwableObjects = new List<ThrowableObject>();
+    private ThrowableObject _currentThrowableObject;
 
     private void Awake()
     {
@@ -25,6 +27,15 @@ public class Spawner : MonoBehaviour
     private void OnEnable()
     {
         _thrower.Throwed += OnThrowableObjectThrowed;
+        _trackableEventHandler.TrackingFound += OnTrackingFound;
+    }
+
+    private void OnTrackingFound(TargetTrackableEventHandler targetTrackableEventHandler)
+    {
+        if (!_currentThrowableObject)
+        {
+            SpawnThrowableObject();
+        }
     }
 
     private void OnDisable()
@@ -32,24 +43,24 @@ public class Spawner : MonoBehaviour
         _thrower.Throwed -= OnThrowableObjectThrowed;
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnThrowableObject());
-    }
-
-IEnumerator SpawnThrowableObject()
+    IEnumerator SpawnThrowableObjectWithDelay()
     {
         yield return new WaitForSeconds(_timeBeforeSpawn);
-
-        var throwableObject = Instantiate(_throwableObjectTemplate, transform.position, transform.rotation, transform);
-        throwableObject.GetComponent<Rigidbody>().isKinematic = true;
-        _throwableObjects.Add(throwableObject);
-
-        ObjectSpawned?.Invoke(throwableObject); 
+        SpawnThrowableObject();
     }
+
+    private void SpawnThrowableObject()
+    {
+        _currentThrowableObject = Instantiate(_throwableObjectTemplate, transform.position, transform.rotation, transform);
+        _currentThrowableObject.GetComponent<Rigidbody>().isKinematic = true;
+        _throwableObjects.Add(_currentThrowableObject);
+
+        ObjectSpawned?.Invoke(_currentThrowableObject);
+    }
+
     public void OnThrowableObjectThrowed(ThrowableObject throwableObject)
     {
-        StartCoroutine(SpawnThrowableObject());
+        StartCoroutine(SpawnThrowableObjectWithDelay());
         throwableObject.transform.parent = _cylinderTarget.transform;
 
         _throwsViewer.UpdateValue();

@@ -2,5 +2,6 @@
 <VuforiaUnityInfo version="7.0">
     <TargetSet version="5.0" toolVersion="2.8.0">
         <CylinderTarget name="BK" version="3.0" targetId="bd989eb4e0f14a37b9eeef1836e814d7" sideLength="11.000000" topDiameter="9.000000" bottomDiameter="6.000000" sideImage="BK.Body_scaled.jpg" topImage="BK.Top_scaled.jpg" bottomImage="BK.Bottom_scaled.jpg"/>
+        <CylinderTarget name="Cup" version="3.0" targetId="2aa96d845d154015afb5f0a30eb2c0a7" sideLength="11.000000" topDiameter="9.000000" bottomDiameter="6.000000" sideImage="Cup.Body_scaled.jpg" topImage="Cup.Top_scaled.jpg" bottomImage="Cup.Bottom_scaled.jpg"/>
     </TargetSet>
 </VuforiaUnityInfo>
